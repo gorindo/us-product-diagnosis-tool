@@ -95,6 +95,100 @@ body {
 
 /* ─── Input panel ────────────────────────────────── */
 
+/* Panel header: vertical stack for input panel */
+.input-panel .panel-header {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.panel-subtext {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+/* Structured input form */
+.input-fields {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e4e7ec;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.field-row {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid #e4e7ec;
+  transition: background 0.12s;
+}
+
+.field-row:last-child {
+  border-bottom: none;
+}
+
+.field-row:focus-within {
+  background: #f8faff;
+}
+
+.field-row:focus-within .field-label {
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+.field-label {
+  flex-shrink: 0;
+  width: 96px;
+  padding: 12px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #4b5563;
+  background: #f9fafb;
+  border-right: 1px solid #e4e7ec;
+  display: flex;
+  align-items: center;
+  transition: background 0.12s, color 0.12s;
+}
+
+.field-input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: #1a1a1a;
+  background: transparent;
+  border: none;
+  outline: none;
+  line-height: 1.6;
+}
+
+.field-input::placeholder {
+  color: #c9d0da;
+  font-weight: 400;
+}
+
+/* Override global textarea rules for structured field textareas */
+textarea.field-input {
+  width: auto;
+  min-height: 72px;
+  padding: 12px 14px;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  resize: none;
+  line-height: 1.6;
+}
+
+textarea.field-input:focus {
+  border-color: transparent;
+  background-color: transparent;
+}
+
 textarea {
   width: 100%;
   min-height: 460px;
@@ -131,6 +225,30 @@ button#diagnoseButton {
 
 button#diagnoseButton:hover  { background-color: #1d4ed8; }
 button#diagnoseButton:active { background-color: #1e40af; }
+
+/* ─── Sample-state example block — muted, clearly not real output ── */
+
+#resultArea[data-state="sample"] .result-block:has(.rewritten-copy) {
+  background-color: transparent;
+  border: 1px dashed #e5e7eb;
+  box-shadow: none;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+#resultArea[data-state="sample"] .result-block:has(.rewritten-copy) h3::before {
+  font-size: 0.65rem;
+  color: #c9d0da;
+  font-weight: 600;
+}
+
+#resultArea[data-state="sample"] .rewritten-copy {
+  color: #c9d0da;
+  font-size: 0.875rem;
+  font-weight: 400;
+}
 
 /* ─── Sample-state visibility ───────────────────── */
 
