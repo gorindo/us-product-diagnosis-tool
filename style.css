@@ -1,0 +1,173 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 16px;
+  background-color: #f0f2f5;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #1a1a1a;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 20px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 24px 0;
+  color: #111111;
+  line-height: 1.3;
+}
+
+.input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #444444;
+}
+
+textarea {
+  width: 100%;
+  min-height: 140px;
+  padding: 12px 14px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #1a1a1a;
+  background-color: #fafafa;
+  border: 1.5px solid #d0d5dd;
+  border-radius: 10px;
+  resize: vertical;
+  outline: none;
+  line-height: 1.6;
+}
+
+textarea::placeholder {
+  color: #aab0ba;
+}
+
+textarea:focus {
+  border-color: #4a7cf6;
+  background-color: #ffffff;
+}
+
+button#diagnoseButton {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: #ffffff;
+  background-color: #4a7cf6;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button#diagnoseButton:active {
+  background-color: #3a6ae0;
+}
+
+.results-section {
+  margin-top: 28px;
+  padding: 16px;
+  background-color: #f8f9fb;
+  border: 1.5px solid #e4e7ec;
+  border-radius: 10px;
+}
+
+.results-section h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #333333;
+}
+
+#resultArea {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: #444444;
+}
+
+#resultArea .placeholder {
+  margin: 0;
+  color: #aab0ba;
+  font-style: italic;
+}
+
+.result-block {
+  margin-bottom: 20px;
+}
+
+.result-block:last-child {
+  margin-bottom: 0;
+}
+
+.result-block h3 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #333333;
+  margin: 0 0 6px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.result-block ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.result-block li {
+  margin-bottom: 4px;
+}
+
+.total-score {
+  font-size: 1.1rem;
+  margin: 0 0 8px 0;
+  color: #111111;
+}
+
+.score-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+}
+
+.rewritten-copy {
+  margin: 0;
+  font-style: italic;
+  color: #2d5be3;
+  background-color: #eef2ff;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+@media (min-width: 600px) {
+  body {
+    padding: 40px 16px;
+  }
+
+  .container {
+    padding: 36px 32px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+}

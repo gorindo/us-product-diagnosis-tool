@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>US Product Diagnosis Tool</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>US Product Diagnosis Tool</h1>
+
+    <div class="input-section">
+      <label for="productInput">Product Description</label>
+      <textarea
+        id="productInput"
+        placeholder="Enter your product description here..."
+        rows="6"
+      ></textarea>
+      <button id="diagnoseButton">Diagnose</button>
+    </div>
+
+    <div class="results-section" id="results-section">
+      <h2>Results</h2>
+      <div id="resultArea">
+        <p class="placeholder">Results will appear here after diagnosis.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
