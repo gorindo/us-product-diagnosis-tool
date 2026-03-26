@@ -1,36 +1,16 @@
-var mockResult = {
-  totalScore: 72,
-  scores: {
-    Clarity: 15,
-    Trust: 13,
-    Benefit: 14,
-    "US Fit": 16,
-    "Purchase Motivation": 14
-  },
-  verdict: "Promising but needs stronger trust and benefit communication.",
-  ngPoints: [
-    "Lacks specific proof points or social validation (reviews, certifications, data).",
-    "Benefit language is vague — readers can't quickly grasp what makes this product unique.",
-    "The copy doesn't address common US buyer objections (returns, safety, quality guarantees)."
-  ],
-  improvements: [
-    "Add concrete evidence: customer reviews, third-party certifications, or usage statistics.",
-    "Lead with the clearest, most tangible benefit in the first sentence.",
-    "Include a trust signal such as a satisfaction guarantee or a well-known endorsement."
-  ],
-  rewrittenCopy: "Trusted by over 10,000 customers — our product delivers [key benefit] in just [timeframe]. Backed by a 30-day satisfaction guarantee and certified by [authority]. See why US shoppers rate it 4.8 out of 5 stars."
-};
-
+// Builds the result HTML from the JSON returned by the server
 function buildResultHTML(result) {
+  // Scores: clarity, trust, benefit, us_fit, purchase_motivation
   var scoresHTML = "";
-  for (var category in result.scores) {
+  for (var key in result.scores) {
+    var label = key.replace(/_/g, " ");
     scoresHTML +=
-      "<li><strong>" + category + ":</strong> " + result.scores[category] + "</li>";
+      "<li><strong>" + label + ":</strong> " + result.scores[key] + "</li>";
   }
 
   var ngHTML = "";
-  for (var i = 0; i < result.ngPoints.length; i++) {
-    ngHTML += "<li>" + result.ngPoints[i] + "</li>";
+  for (var i = 0; i < result.ng_points.length; i++) {
+    ngHTML += "<li>" + result.ng_points[i] + "</li>";
   }
 
   var improvementsHTML = "";
@@ -40,13 +20,13 @@ function buildResultHTML(result) {
 
   return (
     '<div class="result-block">' +
-      '<p class="total-score">Total Score: <strong>' + result.totalScore + ' / 100</strong></p>' +
+      '<p class="total-score">Total Score: <strong>' + result.total_score + ' / 100</strong></p>' +
       '<ul class="score-list">' + scoresHTML + "</ul>" +
     "</div>" +
 
     '<div class="result-block">' +
       "<h3>Verdict</h3>" +
-      "<p>" + result.verdict + "</p>" +
+      "<p><strong>" + result.summary.verdict + "</strong> — " + result.summary.one_line_diagnosis + "</p>" +
     "</div>" +
 
     '<div class="result-block">' +
@@ -61,19 +41,52 @@ function buildResultHTML(result) {
 
     '<div class="result-block">' +
       "<h3>Rewritten English Copy Sample</h3>" +
-      '<p class="rewritten-copy">' + result.rewrittenCopy + "</p>" +
+      '<p class="rewritten-copy">' + result.rewritten_copy + "</p>" +
     "</div>"
   );
 }
 
-document.getElementById("diagnoseButton").addEventListener("click", function () {
+document.getElementById("diagnoseButton").addEventListener("click", async function () {
   var input = document.getElementById("productInput").value.trim();
+  var resultArea = document.getElementById("resultArea");
 
+  // Guard: require input before sending
   if (!input) {
     alert("Please enter a product description before running the diagnosis.");
     return;
   }
 
-  var resultArea = document.getElementById("resultArea");
-  resultArea.innerHTML = buildResultHTML(mockResult);
+  // Show a loading message while waiting for the server
+  resultArea.innerHTML = "<p>Analyzing...</p>";
+
+  try {
+    console.log("[debug] Fetch started");
+
+    // Use the full URL to avoid any path resolution issues
+    var response = await fetch("http://127.0.0.1:5000/diagnose", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ product_description: input })
+    });
+
+    console.log("[debug] Response status:", response.status);
+
+    var data = await response.json();
+
+    if (response.ok) {
+      // Success — render the diagnosis result
+      resultArea.innerHTML = buildResultHTML(data);
+    } else {
+      // Backend returned an error — show the real message from the server
+      var errorMessage = (data && data.error) ? data.error : "Something went wrong.";
+      console.log("[debug] Parsed error body:", errorMessage);
+      resultArea.innerHTML =
+        "<p style='color:#c0392b;'>Error: " + errorMessage + "</p>";
+    }
+  } catch (err) {
+    // Only shown if fetch itself fails (server not running, network issue)
+    console.log("[debug] Fetch error:", err);
+    resultArea.innerHTML =
+      "<p style='color:#c0392b;'>Could not reach the server. Make sure Flask is running.</p>";
+  }
 });
