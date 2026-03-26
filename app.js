@@ -13,38 +13,60 @@ function buildResultHTML(result, beforeText) {
       "<li><strong>" + label + ":</strong> " + result.scores[key] + "</li>";
   }
 
-  var priorityLabels = ["最優先：", "次：", "最後："];
+  var priorityLabels = ["最優先", "次", "最後"];
   var improvementsHTML = "";
   for (var j = 0; j < result.improvements.length; j++) {
     var prefix = priorityLabels[Math.min(j, priorityLabels.length - 1)];
-    improvementsHTML += "<li><strong>" + prefix + "</strong>" + result.improvements[j] + "</li>";
+    improvementsHTML +=
+      '<li style="list-style:none; margin-bottom:8px; padding:10px 14px; background:#fafafa; border-left:3px solid #e5e7eb; border-radius:0 6px 6px 0;">' +
+        '<span style="display:block; font-size:0.62rem; font-weight:700; letter-spacing:0.09em; text-transform:uppercase; color:#9ca3af; margin-bottom:4px;">' + prefix + '</span>' +
+        '<span style="font-size:0.875rem; color:#374151; line-height:1.6;">' + result.improvements[j] + '</span>' +
+      '</li>';
   }
 
-  return (
-    // Warning — default flex order 0, appears first
-    '<p style="margin:0; font-size:0.9rem; font-weight:700; color:#dc2626;">このままでは売れません</p>' +
+  var score = result.total_score;
+  var scoreColor = score >= 70 ? "#16a34a" : score >= 50 ? "#d97706" : "#dc2626";
+  var scoreVerdict = score >= 70 ? "このレベルなら販売可能です" : score >= 50 ? "改善すれば売れる可能性があります" : "このままでは売れません";
 
-    // BEFORE block
-    '<div class="result-block" style="order:0; background:#f3f4f6; border:1px solid #e5e7eb; border-radius:8px; padding:12px 14px;">' +
-      '<p style="margin:0 0 6px; font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#9ca3af;">あなたの文章（Before）</p>' +
-      '<p style="margin:0; font-size:0.875rem; color:#6b7280; line-height:1.6; white-space:pre-wrap; word-break:break-word;">' + escaped + '</p>' +
+  // CSS nth-child rules target .result-block children at positions 4 & 5 in this new DOM.
+  // Override with explicit inline order values so CSS ordering is neutralised.
+  return (
+    // ── Score banner (child 1, not .result-block, order:0 default) ──
+    '<div style="display:flex; align-items:center; gap:16px; padding:14px 18px; background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px;">' +
+      '<div style="flex-shrink:0;">' +
+        '<p style="margin:0 0 2px; font-size:0.62rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#9ca3af;">販売スコア</p>' +
+        '<p style="margin:0; line-height:1;"><span style="font-size:2rem; font-weight:800; color:' + scoreColor + ';">' + score + '</span><span style="font-size:0.85rem; font-weight:600; color:#b0b8c4;"> / 100</span></p>' +
+      '</div>' +
+      '<div style="width:1px; height:36px; background:#e5e7eb; flex-shrink:0;"></div>' +
+      '<p style="margin:0; font-size:0.875rem; font-weight:700; color:' + scoreColor + '; line-height:1.4;">' + scoreVerdict + '</p>' +
     '</div>' +
 
-    // AFTER block — dominant, styled by :has(.rewritten-copy) in CSS
-    '<div class="result-block" style="order:1;">' +
-      '<h3>Rewritten English Copy Sample</h3>' +
+    // ── BEFORE (child 2, not .result-block, order:0 default) ──
+    '<div>' +
+      '<p style="margin:0 0 6px; font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#9ca3af;">あなたの文章（Before）</p>' +
+      '<div style="background:#f3f4f6; border:1px solid #e5e7eb; border-radius:8px; padding:14px 16px; font-size:0.875rem; color:#6b7280; line-height:1.7; white-space:pre-wrap; word-break:break-word;">' + escaped + '</div>' +
+    '</div>' +
+
+    // ── Arrow (child 3, not .result-block, order:0 default) ──
+    '<p style="margin:0; text-align:center; font-size:1.1rem; color:#d1d5db; line-height:1;">↓</p>' +
+
+    // ── AFTER (child 4, .result-block — CSS applies order:2, overridden to 4) ──
+    // h3 hidden so CSS ::before label is suppressed; custom label shown instead
+    '<div class="result-block" style="order:4;">' +
+      '<h3 style="display:none;">Rewritten English Copy Sample</h3>' +
+      '<p style="margin:0 0 10px; font-size:0.72rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:#2563eb;">このレベルなら販売可能</p>' +
       '<p class="rewritten-copy">' + result.rewritten_copy + '</p>' +
     '</div>' +
 
-    // Improvements block — priority-labelled
-    '<div class="result-block" style="order:2;">' +
+    // ── Improvements (child 5, .result-block — CSS applies order:1, overridden to 5) ──
+    '<div class="result-block" style="order:5;">' +
       '<h3>Suggested Improvements</h3>' +
-      '<ul>' + improvementsHTML + '</ul>' +
+      '<ul style="margin:0; padding:0;">' + improvementsHTML + '</ul>' +
     '</div>' +
 
-    // Score block — last
-    '<div class="result-block" style="order:3;">' +
-      '<p class="total-score">Total Score: <strong>' + result.total_score + ' / 100</strong></p>' +
+    // ── Score detail (child 6, .result-block — no CSS rule, explicit order:6) ──
+    '<div class="result-block" style="order:6;">' +
+      '<p class="total-score">Total Score: <strong>' + score + ' / 100</strong></p>' +
       '<ul class="score-list">' + scoresHTML + '</ul>' +
     '</div>'
   );

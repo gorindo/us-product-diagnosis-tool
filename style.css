@@ -42,9 +42,50 @@ body {
 }
 
 .header-title {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #111111;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0a0a0a;
+  letter-spacing: -0.01em;
+}
+
+/* ─── Hero ───────────────────────────────────────── */
+
+.hero {
+  text-align: center;
+  padding: 40px 0 20px;
+}
+
+.hero-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.hero p {
+  margin: 8px 0;
+}
+
+/* ─── Site tagline ───────────────────────────────── */
+
+.site-tagline {
+  margin: 0 0 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+  letter-spacing: 0.01em;
+}
+
+.site-positioning {
+  margin: 0 0 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #6b7280;
+  line-height: 1.7;
+}
+
+/* ─── Main container ─────────────────────────────── */
+
+.main-container {
+  margin-top: 20px;
 }
 
 /* ─── Workspace ─────────────────────────────────── */
@@ -54,7 +95,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
-  padding: 24px 28px;
+  padding: 18px 28px;
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
@@ -94,6 +135,14 @@ body {
 }
 
 /* ─── Input panel ────────────────────────────────── */
+
+.panel-lead {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #111111;
+  letter-spacing: 0.01em;
+}
 
 /* Panel header: vertical stack for input panel */
 .input-panel .panel-header {
@@ -236,6 +285,8 @@ button#diagnoseButton:active { background-color: #1e40af; }
   user-select: none;
   -webkit-user-select: none;
   cursor: default;
+  opacity: 0.5;
+  filter: blur(0.6px);
 }
 
 #resultArea[data-state="sample"] .result-block:has(.rewritten-copy) h3::before {
@@ -359,7 +410,7 @@ body:has(#resultArea:not([data-state="sample"])) .sample-only {
   margin: 0 0 10px 0;
 }
 .result-block:has(.rewritten-copy) h3::before {
-  content: "この文章なら売れる（After）";
+  content: "修正後（そのまま使える文章）";
   display: block;
   font-size: 0.72rem;
   font-weight: 800;
@@ -393,7 +444,7 @@ body:has(#resultArea:not([data-state="sample"])) .sample-only {
   margin: 0 0 8px 0;
 }
 .result-block:has(ul):not(:has(.score-list)) h3::before {
-  content: "改善ポイント";
+  content: "先に直すべきポイント";
   display: block;
   font-size: 0.72rem;
   font-weight: 800;

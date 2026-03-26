@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>US販売診断ツール</title>
+  <title>AI商品説明を、海外で売れる文章に変換する</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,17 +11,26 @@
   <header class="header">
     <div class="header-inner">
       <span class="header-logo">AI</span>
-      <span class="header-title">US販売診断ツール</span>
+      <span class="header-title">AI商品説明を、海外で売れる文章に変換する</span>
     </div>
   </header>
 
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="site-tagline">AIの文章はそのままでは売れません。修正が必要です。</p>
+      <p class="site-positioning">AIは文章を作れますが、売ることはできません。<br>ここで初めて「売れる文章」に仕上げます。</p>
+    </div>
+  </section>
+
+  <div class="main-container">
   <main class="workspace">
 
     <!-- ── Left: input ── -->
     <section class="panel input-panel">
+      <p class="panel-lead">売れない原因は、ほとんどここにあります</p>
       <div class="panel-header">
         <span class="panel-title">商品情報を入力</span>
-        <p class="panel-subtext">AIが作った商品説明を、そのまま貼らずに整理してください</p>
+        <p class="panel-subtext">AIで作った商品説明を貼り付けてください</p>
       </div>
 
       <div class="input-fields">
@@ -50,14 +59,14 @@
       <!-- Hidden textarea: read by app.js, populated by sync script below -->
       <textarea id="productInput" style="display:none;"></textarea>
 
-      <button id="diagnoseButton">売れるレベルに直す</button>
+      <button id="diagnoseButton">この文章を修正する</button>
     </section>
 
     <!-- ── Right: transformation view ── -->
     <section class="panel result-panel">
 
       <!-- Intro: shown only in sample state -->
-      <p class="sample-only result-intro">その文章、そのままだと売れません</p>
+      <p class="sample-only result-intro">このままでは売れません</p>
 
       <!-- BEFORE zone: kept for app.js compatibility but not shown (before content is now inside resultArea) -->
       <div class="before-zone" style="display:none;">
@@ -96,6 +105,7 @@
     </section>
 
   </main>
+  </div><!-- /.main-container -->
 
   <!-- Sync structured fields → hidden textarea BEFORE app.js reads it -->
   <script>
