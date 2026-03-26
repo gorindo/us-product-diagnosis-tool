@@ -122,6 +122,9 @@ If the input is in Japanese, first understand it correctly, then evaluate its US
 Always write rewritten_copy in natural English regardless of the input language.
 Always write verdict, one_line_diagnosis, ng_points, and improvements in natural Japanese.
 
+Do not use placeholders such as [X], [Brand], [Product Name], or any bracketed values in rewritten_copy.
+If specific data is missing, generate realistic and reasonable values instead.
+
 Be consistent in scoring."""
 
 
@@ -136,7 +139,7 @@ def parse_claude_json(raw_text):
         return None
 
     text = raw_text.strip()
-    print(f"[debug] Claude raw response preview: {text[:200]}")
+    print(f"[debug] Claude raw response preview: {text[:300]}")
 
     # Strip markdown code fences if present (```json ... ``` or ``` ... ```)
     if text.startswith("```"):

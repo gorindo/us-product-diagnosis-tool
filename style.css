@@ -4,63 +4,114 @@
 
 body {
   margin: 0;
-  padding: 16px;
   background-color: #f0f2f5;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   color: #1a1a1a;
   min-height: 100vh;
-}
-
-.container {
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 24px 20px;
-  background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-}
-
-h1 {
-  font-size: 1.4rem;
-  font-weight: 700;
-  margin: 0 0 24px 0;
-  color: #111111;
-  line-height: 1.3;
-}
-
-.input-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
 }
 
-label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #444444;
+/* ─── Header ───────────────────────────────────── */
+
+.header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e4e7ec;
+  height: 52px;
+  flex-shrink: 0;
 }
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 28px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-logo {
+  background-color: #2563eb;
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 3px 7px;
+  border-radius: 5px;
+}
+
+.header-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111111;
+}
+
+/* ─── Workspace ─────────────────────────────────── */
+
+.workspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 24px 28px;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  align-items: start;
+}
+
+/* ─── Panels ─────────────────────────────────────── */
+
+.panel {
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e4e7ec;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.panel-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.panel-hint {
+  font-size: 0.75rem;
+  color: #b0b8c4;
+}
+
+/* ─── Input panel ────────────────────────────────── */
 
 textarea {
   width: 100%;
-  min-height: 140px;
-  padding: 12px 14px;
-  font-size: 1rem;
+  min-height: 460px;
+  padding: 14px 16px;
+  font-size: 0.9375rem;
   font-family: inherit;
   color: #1a1a1a;
   background-color: #fafafa;
   border: 1.5px solid #d0d5dd;
-  border-radius: 10px;
+  border-radius: 8px;
   resize: vertical;
   outline: none;
-  line-height: 1.6;
-}
-
-textarea::placeholder {
-  color: #aab0ba;
+  line-height: 1.8;
 }
 
 textarea:focus {
-  border-color: #4a7cf6;
+  border-color: #2563eb;
   background-color: #ffffff;
 }
 
@@ -68,61 +119,169 @@ button#diagnoseButton {
   width: 100%;
   padding: 14px;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   font-family: inherit;
   color: #ffffff;
-  background-color: #4a7cf6;
+  background-color: #2563eb;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
+  letter-spacing: 0.03em;
 }
 
-button#diagnoseButton:active {
-  background-color: #3a6ae0;
+button#diagnoseButton:hover  { background-color: #1d4ed8; }
+button#diagnoseButton:active { background-color: #1e40af; }
+
+/* ─── Sample-state visibility ───────────────────── */
+
+/* Hide .before-zone until the user runs a diagnosis */
+body:has(#resultArea[data-state="sample"]) .before-zone {
+  display: none;
 }
 
-.results-section {
-  margin-top: 28px;
-  padding: 16px;
-  background-color: #f8f9fb;
-  border: 1.5px solid #e4e7ec;
-  border-radius: 10px;
+/* Hide .sample-only elements once a result (loading/live/error) arrives */
+body:has(#resultArea:not([data-state="sample"])) .sample-only {
+  display: none;
 }
 
-.results-section h2 {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0 0 12px 0;
-  color: #333333;
-}
-
-#resultArea {
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  color: #444444;
-}
-
-#resultArea .placeholder {
+.result-intro {
   margin: 0;
-  color: #aab0ba;
-  font-style: italic;
+  font-size: 0.8rem;
+  color: #b0b8c4;
 }
 
-.result-block {
-  margin-bottom: 20px;
+.result-footer-note {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #b0b8c4;
+  text-align: center;
 }
 
-.result-block:last-child {
-  margin-bottom: 0;
+/* ─── BEFORE zone ────────────────────────────────── */
+
+.before-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.result-block h3 {
-  font-size: 0.875rem;
+.zone-label {
+  font-size: 0.72rem;
   font-weight: 700;
-  color: #333333;
-  margin: 0 0 6px 0;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  color: #9ca3af;
+}
+
+.before-text {
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+/* ─── resultArea states ──────────────────────────── */
+
+/* Loading: show app.js "Analyzing..." text plainly */
+#resultArea[data-state="loading"] {
+  padding: 20px 0 8px;
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+/* Sample & live: flex column to allow CSS ordering */
+#resultArea[data-state="sample"],
+#resultArea[data-state="live"] {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ─── LIVE: reorder app.js blocks via flex order ──
+   app.js emits blocks in this DOM order:
+   1 = score     2 = verdict    3 = NG points
+   4 = improvements    5 = rewritten copy
+─────────────────────────────────────────────────── */
+
+#resultArea[data-state="live"] .result-block:nth-child(1) { order: 4; }  /* score  → last   */
+#resultArea[data-state="live"] .result-block:nth-child(2) { display: none; }  /* verdict → hide  */
+#resultArea[data-state="live"] .result-block:nth-child(3) { display: none; }  /* NG      → hide  */
+#resultArea[data-state="live"] .result-block:nth-child(4) { order: 2; }  /* improvements → 2nd */
+#resultArea[data-state="live"] .result-block:nth-child(5) { order: 1; }  /* rewritten → 1st  */
+
+/* Limit improvements to 3 items */
+#resultArea[data-state="live"] .result-block:nth-child(4) li:nth-child(n+4) {
+  display: none;
+}
+
+/* ─── AFTER block — the dominant section ────────────
+   Targets whichever .result-block contains .rewritten-copy
+   (works for both sample and live states)
+─────────────────────────────────────────────────── */
+
+.result-block:has(.rewritten-copy) {
+  background-color: #ffffff;
+  border: 2px solid #2563eb;
+  border-radius: 10px;
+  padding: 20px 20px 18px;
+  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.10);
+}
+
+/* Relabel "Rewritten English Copy Sample" → 「この文章なら売れる（After）」 */
+.result-block:has(.rewritten-copy) h3 {
+  font-size: 0;
+  color: transparent;
+  margin: 0 0 10px 0;
+}
+.result-block:has(.rewritten-copy) h3::before {
+  content: "この文章なら売れる（After）";
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2563eb;
+}
+
+.rewritten-copy {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #111111;
+  white-space: pre-wrap;
+  font-weight: 450;
+}
+
+/* ─── IMPROVEMENTS block ──────────────────────────── */
+
+.result-block:has(ul):not(:has(.score-list)) {
+  background-color: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px 18px;
+}
+
+/* Relabel h3 for improvements */
+.result-block:has(ul):not(:has(.score-list)) h3 {
+  font-size: 0;
+  color: transparent;
+  margin: 0 0 8px 0;
+}
+.result-block:has(ul):not(:has(.score-list)) h3::before {
+  content: "改善ポイント";
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
 }
 
 .result-block ul {
@@ -131,13 +290,53 @@ button#diagnoseButton:active {
 }
 
 .result-block li {
+  font-size: 0.875rem;
+  color: #374151;
+  line-height: 1.7;
+  margin-bottom: 5px;
+}
+
+.result-block li:last-child {
+  margin-bottom: 0;
+}
+
+/* ─── SCORE block ─────────────────────────────────── */
+
+.result-block:has(.total-score) {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 14px 18px;
+}
+
+/* Relabel and style total-score */
+.total-score {
+  margin: 0 0 8px 0;
+  font-size: 0;
+  color: transparent;
+  line-height: 1;
+}
+
+.total-score::before {
+  content: "スコア";
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9ca3af;
   margin-bottom: 4px;
 }
 
-.total-score {
-  font-size: 1.1rem;
-  margin: 0 0 8px 0;
+.total-score strong {
+  font-size: 1.75rem;
+  font-weight: 800;
   color: #111111;
+  line-height: 1;
+}
+
+.total-score strong::before {
+  content: "🔥 ";
 }
 
 .score-list {
@@ -146,28 +345,69 @@ button#diagnoseButton:active {
   margin: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 16px;
+  gap: 4px 14px;
+  font-size: 0.75rem;
+  color: #9ca3af;
 }
 
-.rewritten-copy {
+.score-list li strong {
+  color: #6b7280;
+  font-weight: 600;
+}
+
+/* ─── Copy row ────────────────────────────────────── */
+
+.copy-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#copyBtn {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: #2563eb;
+  background: transparent;
+  border: 1.5px solid #2563eb;
+  border-radius: 6px;
+  padding: 6px 18px;
+  cursor: pointer;
+}
+
+#copyBtn:hover {
+  background-color: #eff6ff;
+}
+
+/* ─── Error / loading messages ───────────────────── */
+
+.result-error {
+  font-size: 0.875rem;
+  color: #dc2626;
+  padding: 12px 0;
   margin: 0;
-  font-style: italic;
-  color: #2d5be3;
-  background-color: #eef2ff;
-  padding: 10px 12px;
-  border-radius: 8px;
 }
 
-@media (min-width: 600px) {
-  body {
-    padding: 40px 16px;
+#resultArea[data-state="loading"] p,
+#resultArea[data-state="error"] p {
+  font-size: 0.875rem;
+  padding: 12px 0;
+  margin: 0;
+}
+
+/* ─── Mobile ──────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .header-inner { padding: 0 16px; }
+
+  .workspace {
+    grid-template-columns: 1fr;
+    padding: 14px;
+    gap: 14px;
   }
 
-  .container {
-    padding: 36px 32px;
-  }
+  .panel { padding: 18px 16px; }
 
-  h1 {
-    font-size: 1.6rem;
-  }
+  textarea { min-height: 220px; }
+
+  .before-text { max-height: 80px; }
 }

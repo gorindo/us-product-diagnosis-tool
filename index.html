@@ -1,33 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>US Product Diagnosis Tool</title>
+  <title>US販売診断ツール</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>US Product Diagnosis Tool</h1>
 
-    <div class="input-section">
-      <label for="productInput">Product Description</label>
-      <textarea
-        id="productInput"
-        placeholder="Enter your product description here..."
-        rows="6"
-      ></textarea>
-      <button id="diagnoseButton">Diagnose</button>
+  <header class="header">
+    <div class="header-inner">
+      <span class="header-logo">AI</span>
+      <span class="header-title">US販売診断ツール</span>
     </div>
+  </header>
 
-    <div class="results-section" id="results-section">
-      <h2>Results</h2>
-      <div id="resultArea">
-        <p class="placeholder">Results will appear here after diagnosis.</p>
+  <main class="workspace">
+
+    <!-- ── Left: input ── -->
+    <section class="panel input-panel">
+      <div class="panel-header">
+        <label class="panel-title" for="productInput">商品説明を入力</label>
+        <span class="panel-hint">AIで作った文章をそのまま貼ってください</span>
       </div>
-    </div>
-  </div>
+      <textarea id="productInput">商品名：
+素材：
+特徴：
+ターゲット：
+使用シーン：</textarea>
+      <button id="diagnoseButton">売れるレベルに直す</button>
+    </section>
+
+    <!-- ── Right: transformation view ── -->
+    <section class="panel result-panel">
+
+      <!-- Intro: shown only in sample state -->
+      <p class="sample-only result-intro">その文章、そのままだと売れません</p>
+
+      <!-- BEFORE zone: kept for app.js compatibility but not shown (before content is now inside resultArea) -->
+      <div class="before-zone" style="display:none;">
+        <div class="zone-label">あなたの文章（Before）</div>
+        <div id="beforeText" class="before-text"></div>
+      </div>
+
+      <!-- Dynamic area: sample by default, replaced by app.js after diagnosis -->
+      <div id="resultArea" data-state="sample">
+
+        <!-- SAMPLE: AFTER block only -->
+        <div class="result-block">
+          <h3>Rewritten English Copy Sample</h3>
+          <p class="rewritten-copy">This titanium umbrella is built for commuters who need a lightweight, durable solution for rainy days. Strong, compact, and easy to carry, it is designed for everyday reliability.</p>
+        </div>
+
+        <!-- SAMPLE: override AFTER label for initial state only -->
+        <style>
+          #resultArea[data-state="sample"] .result-block:has(.rewritten-copy) h3::before {
+            content: "修正後（このレベルでやっと売れる）";
+          }
+        </style>
+
+      </div>
+
+      <!-- Footer note: shown only in sample state -->
+      <p class="sample-only result-footer-note">入力後に改善ポイントとスコアが表示されます</p>
+
+      <!-- Copy button: always accessible -->
+      <div class="copy-row">
+        <button id="copyBtn" onclick="copyRewrittenCopy()">コピー</button>
+      </div>
+      <p class="copy-instruction" style="margin:0; font-size:0.8rem; color:#6b7280; text-align:right;">→ この文章をそのまま商品ページに使ってください</p>
+
+    </section>
+
+  </main>
 
   <script src="app.js"></script>
+  <script>
+    function copyRewrittenCopy() {
+      var el = document.querySelector(".rewritten-copy");
+      if (!el) return;
+      navigator.clipboard.writeText(el.innerText).then(function () {
+        var btn = document.getElementById("copyBtn");
+        btn.textContent = "コピーしました ✓";
+        setTimeout(function () { btn.textContent = "コピー"; }, 2000);
+      });
+    }
+  </script>
+
 </body>
 </html>
