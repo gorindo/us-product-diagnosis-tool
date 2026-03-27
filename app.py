@@ -19,7 +19,14 @@ print(f"[debug] ANTHROPIC_API_KEY present: {bool(os.environ.get('ANTHROPIC_API_K
 app = Flask(__name__)
 BASE_DIR = str(BASE_DIR)  # keep as string for send_from_directory
 
-SYSTEM_PROMPT = """You are a professional US-market product listing evaluator for Japanese sellers.
+SYSTEM_PROMPT = """CRITICAL OUTPUT RULE: You must respond with a single valid JSON object and nothing else.
+- Start your response with `{` and end with `}`.
+- Do not include markdown, code fences, comments, or any text outside the JSON.
+- Do not use trailing commas.
+- All string values must use double quotes.
+- Violating this rule makes your output unusable.
+
+You are a professional US-market product listing evaluator for Japanese sellers.
 
 Your job is to evaluate whether a product description written by a Japanese seller is likely to sell in the US market.
 
@@ -212,7 +219,8 @@ def diagnose():
         client = anthropic.Anthropic(api_key=api_key)
         message = client.messages.create(
             model="claude-sonnet-4-6",
-            max_tokens=1024,
+            max_tokens=2048,
+            temperature=0,
             system=SYSTEM_PROMPT,
             messages=[
                 {"role": "user", "content": product_description}
@@ -220,11 +228,15 @@ def diagnose():
         )
         print("[debug] Anthropic API call complete")
 
+        raw_text = message.content[0].text
+
         # Parse Claude's JSON response safely
         print("[debug] Parsing Claude response...")
-        result = parse_claude_json(message.content[0].text)
+        result = parse_claude_json(raw_text)
         if result is None:
-            return jsonify({"error": "Claude returned a response that could not be parsed as JSON."}), 500
+            # Return raw text so the client can display something instead of a hard failure
+            print("[debug] JSON parse failed; returning raw text fallback")
+            return jsonify({"parse_error": True, "raw_text": raw_text}), 200
 
         print("[debug] Parsing successful")
         return jsonify(result), 200
