@@ -649,14 +649,21 @@ body:has(#resultArea:not([data-state="sample"])) .sample-only {
   font-size: 0.83rem;
   font-weight: 600;
   font-family: inherit;
-  color: #9ca3af;
-  background: transparent;
-  border: 1.5px solid #d1d5db;
+  color: #ffffff;
+  background: linear-gradient(135deg, #4f7cff 0%, #6fa3ff 100%);
+  border: none;
   border-radius: 8px;
-  cursor: default;
+  cursor: pointer;
   letter-spacing: 0.02em;
   white-space: nowrap;
-  pointer-events: none;
+  pointer-events: auto;
+  box-shadow: 0 1px 4px rgba(79, 124, 255, 0.18);
+  transition: background 0.15s, box-shadow 0.15s;
+}
+
+.upgrade-btn:hover {
+  background: linear-gradient(135deg, #5f8aff 0%, #7fb0ff 100%);
+  box-shadow: 0 3px 10px rgba(79, 124, 255, 0.28);
 }
 
 .upgrade-hint {
