@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI商品説明を、海外で売れる文章に変換する</title>
+  <title>商品説明 訴求力分析ツール</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,14 +11,14 @@
   <header class="header">
     <div class="header-inner">
       <span class="header-logo">AI</span>
-      <span class="header-title">AI商品説明を、海外で売れる文章に変換する</span>
+      <span class="header-title">商品説明 訴求力分析ツール</span>
     </div>
   </header>
 
   <section class="hero">
     <div class="hero-inner">
-      <p class="site-tagline">AIの文章はそのままでは売れません。修正が必要です。</p>
-      <p class="site-positioning">AIは文章を作れますが、売ることはできません。<br>ここで初めて「売れる文章」に仕上げます。</p>
+      <p class="site-tagline">AIが生成した文章は、そのままでは訴求力が不十分なことがあります。</p>
+      <p class="site-positioning">AIは構造的な文章を生成しますが、購買文脈への最適化は別のプロセスが必要です。<br>本ツールは、商品情報をもとに市場視点での分析と改善提案を行います。<br>生成AIと組み合わせて利用することで、より実用的なアウトプットへ調整します。</p>
     </div>
   </section>
 
@@ -27,10 +27,10 @@
 
     <!-- ── Left: input ── -->
     <section class="panel input-panel">
-      <p class="panel-lead">売れない原因は、ほとんどここにあります</p>
+      <p class="panel-lead">訴求力に関わる主な要素を確認できます</p>
       <div class="panel-header">
         <span class="panel-title">商品情報を入力</span>
-        <p class="panel-subtext">AIで作った商品説明を貼り付けてください</p>
+        <p class="panel-subtext">分析したい商品の情報を入力してください</p>
       </div>
 
       <div class="input-fields">
@@ -59,14 +59,14 @@
       <!-- Hidden textarea: read by app.js, populated by sync script below -->
       <textarea id="productInput" style="display:none;"></textarea>
 
-      <button id="diagnoseButton">この文章を修正する</button>
+      <button id="diagnoseButton">売れない原因を分析する</button>
     </section>
 
     <!-- ── Right: transformation view ── -->
     <section class="panel result-panel">
 
       <!-- Intro: shown only in sample state -->
-      <p class="sample-only result-intro">このままでは売れません</p>
+      <p class="sample-only result-intro">出力例（入力後に実際の分析結果が表示されます）</p>
 
       <!-- BEFORE zone: kept for app.js compatibility but not shown (before content is now inside resultArea) -->
       <div class="before-zone" style="display:none;">
@@ -87,20 +87,20 @@
         <!-- SAMPLE: override AFTER label for initial state only -->
         <style>
           #resultArea[data-state="sample"] .result-block:has(.rewritten-copy) h3::before {
-            content: "出力例（このレベルまで引き上げます）";
+            content: "出力例（改善後の文章イメージ）";
           }
         </style>
 
       </div>
 
       <!-- Footer note: shown only in sample state -->
-      <p class="sample-only result-footer-note">入力後に改善ポイントとスコアが表示されます</p>
+      <p class="sample-only result-footer-note">入力後、改善余地と優先度が表示されます</p>
 
       <!-- Copy button: always accessible -->
       <div class="copy-row">
         <button id="copyBtn" onclick="copyRewrittenCopy()">コピー</button>
       </div>
-      <p class="copy-instruction" style="margin:0; font-size:0.8rem; color:#6b7280; text-align:right;">→ この文章をそのまま商品ページに使ってください</p>
+      <p class="copy-instruction" style="margin:0; font-size:0.8rem; color:#6b7280; text-align:right;">→ 分析結果として生成された改善後の文章です</p>
 
     </section>
 
@@ -113,24 +113,24 @@
 
       <div class="upgrade-text">
         <p class="upgrade-eyebrow">無料診断の先に</p>
-        <h2 class="upgrade-title">ここから先は、<br>もっと改善できます<span class="upgrade-title-sub">（売れる確率を一気に引き上げます）</span></h2>
+        <h2 class="upgrade-title">さらに詳細な分析と<br>改善提案が利用できます</h2>
       </div>
 
       <div class="upgrade-divider"></div>
 
       <ul class="upgrade-features">
-        <li>競合より"選ばれる理由"を明確化</li>
-        <li>一瞬で刺さるキャッチコピーを生成</li>
-        <li>ターゲット別に売れるパターンを提示</li>
-        <li>改善を積み上げて成果を最大化</li>
+        <li>競合との差別化要因を構造的に分析</li>
+        <li>訴求力の高いコピーを複数パターン生成</li>
+        <li>ターゲット別の訴求パターンを提示</li>
+        <li>継続的な改善による成果の向上</li>
       </ul>
 
       <div class="upgrade-divider"></div>
 
       <div class="upgrade-cta">
-        <button class="upgrade-btn" tabindex="-1">売れる文章に仕上げる</button>
+        <button class="upgrade-btn" tabindex="-1">詳細分析を利用する</button>
         <p class="upgrade-hint">もうすぐ使えます</p>
-        <p class="upgrade-hint">※ 次の改善で、売れる精度がさらに上がります</p>
+        <p class="upgrade-hint">※ 分析精度は継続的に改善されています</p>
       </div>
 
     </div>

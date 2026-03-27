@@ -410,7 +410,7 @@ body:has(#resultArea:not([data-state="sample"])) .sample-only {
   margin: 0 0 10px 0;
 }
 .result-block:has(.rewritten-copy) h3::before {
-  content: "修正後（そのまま使える文章）";
+  content: "改善後の文章（分析結果）";
   display: block;
   font-size: 0.72rem;
   font-weight: 800;
@@ -444,7 +444,7 @@ body:has(#resultArea:not([data-state="sample"])) .sample-only {
   margin: 0 0 8px 0;
 }
 .result-block:has(ul):not(:has(.score-list)) h3::before {
-  content: "先に直すべきポイント";
+  content: "優先度の高い改善ポイント";
   display: block;
   font-size: 0.72rem;
   font-weight: 800;

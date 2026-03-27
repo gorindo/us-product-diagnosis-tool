@@ -217,7 +217,7 @@ function buildResultHTML(result, beforeText) {
         ' style="width:100%; padding:17px 20px; background:#2563eb; color:#fff; font-size:1rem; font-weight:800; border:none; border-radius:10px; cursor:pointer; letter-spacing:0.04em; box-shadow:0 4px 16px rgba(37,99,235,0.28);"' +
         ' onmouseover="this.style.background=\'#1d4ed8\'; this.style.boxShadow=\'0 6px 22px rgba(37,99,235,0.38)\'"' +
         ' onmouseout="this.style.background=\'#2563eb\'; this.style.boxShadow=\'0 4px 16px rgba(37,99,235,0.28)\'">' +
-        'もう一度改善する' +
+        '修正して再診断する' +
       '</button>' +
       '<p style="margin:10px 0 0; font-size:0.82rem; color:#6b7280; font-weight:500;">あと1回で、売れる文章に近づきます</p>' +
     '</div>' +
@@ -236,6 +236,12 @@ document.getElementById("diagnoseButton").addEventListener("click", async functi
 
   if (!input) {
     alert("商品説明を入力してください。");
+    return;
+  }
+
+  var usageCount = parseInt(localStorage.getItem("diagnosisUsageCount") || "0", 10);
+  if (usageCount >= 2) {
+    alert("無料版は2回までです。続きは次のアップデートで解放されます。");
     return;
   }
 
@@ -270,6 +276,8 @@ document.getElementById("diagnoseButton").addEventListener("click", async functi
     } else if (response.ok) {
       resultArea.innerHTML = buildResultHTML(data, input);
       resultArea.dataset.state = "live";
+      localStorage.setItem("diagnosisUsageCount", usageCount + 1);
+      document.getElementById("diagnoseButton").textContent = "改善案を出す";
     } else {
       var errorMessage = (data && data.error) ? data.error : "Something went wrong.";
       console.log("[debug] Parsed error body:", errorMessage);
