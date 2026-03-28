@@ -91,33 +91,48 @@ function renderAfterCopy(text) {
 function buildResultHTML(result, beforeText) {
   var score = result.total_score;
 
-  // Emotional score label (4 bands)
-  var scoreColor, scoreLabel;
+  // Score label + diagnosis label (4 bands)
+  var scoreColor, scoreLabel, diagnosisLabel, diagnosisLabelColor, diagnosisLabelBg;
   if (score <= 30) {
-    scoreColor = '#dc2626'; scoreLabel = 'ほぼ売れません';
+    scoreColor = '#dc2626'; scoreLabel = '訴求力が低い状態です';
+    diagnosisLabel = '訴求不足（改善余地 大）'; diagnosisLabelColor = '#dc2626'; diagnosisLabelBg = '#fef2f2';
   } else if (score <= 60) {
-    scoreColor = '#d97706'; scoreLabel = '改善すれば売れる可能性あり';
+    scoreColor = '#d97706'; scoreLabel = '改善余地が確認されます';
+    diagnosisLabel = '要改善'; diagnosisLabelColor = '#d97706'; diagnosisLabelBg = '#fffbeb';
   } else if (score <= 80) {
-    scoreColor = '#2563eb'; scoreLabel = '売れる可能性があります';
+    scoreColor = '#2563eb'; scoreLabel = '訴求力は十分な水準です';
+    diagnosisLabel = '良好'; diagnosisLabelColor = '#2563eb'; diagnosisLabelBg = '#eff6ff';
   } else {
-    scoreColor = '#16a34a'; scoreLabel = 'かなり売れる状態です';
+    scoreColor = '#16a34a'; scoreLabel = '高い訴求力が確認されます';
+    diagnosisLabel = '優秀'; diagnosisLabelColor = '#16a34a'; diagnosisLabelBg = '#f0fdf4';
   }
 
-  // Improvement impact sentence (shown from the 2nd run onward)
-  var impactHTML = '';
+  // Score display: show before → after change when a previous score exists
+  var scoreDisplayHTML;
   if (window.__prevDiagnosisScore !== undefined) {
-    var delta = score - window.__prevDiagnosisScore;
-    if (delta > 0) {
-      impactHTML =
-        '<p style="margin:10px 0 0; font-size:0.85rem; font-weight:800; color:#16a34a; background:#dcfce7; display:inline-block; padding:4px 14px; border-radius:20px; letter-spacing:0.02em;">' +
-          '今回の改善で ＋' + delta + ' 向上しました' +
-        '</p>';
-    } else if (delta < 0) {
-      impactHTML =
-        '<p style="margin:10px 0 0; font-size:0.85rem; font-weight:800; color:#dc2626; background:#fee2e2; display:inline-block; padding:4px 14px; border-radius:20px; letter-spacing:0.02em;">' +
-          '今回は ' + delta + ' 下がりました' +
-        '</p>';
-    }
+    var prev = window.__prevDiagnosisScore;
+    var delta = score - prev;
+    var deltaStr = (delta > 0 ? '+' : '') + delta;
+    var deltaColor = delta > 0 ? '#2563eb' : (delta < 0 ? '#dc2626' : '#9ca3af');
+    var deltaBg   = delta > 0 ? '#eff6ff'  : (delta < 0 ? '#fef2f2'  : '#f3f4f6');
+    scoreDisplayHTML =
+      '<div style="display:flex; align-items:baseline; justify-content:center; gap:10px; margin-bottom:8px;">' +
+        '<span style="font-size:1.6rem; font-weight:700; color:#d1d5db; line-height:1;">' + prev + '</span>' +
+        '<span style="font-size:1rem; color:#d1d5db;">→</span>' +
+        '<span style="font-size:3.2rem; font-weight:900; color:' + scoreColor + '; line-height:1;">' + score + '</span>' +
+        '<span style="font-size:0.95rem; font-weight:500; color:#b0b8c4; line-height:1;">/ 100</span>' +
+      '</div>' +
+      '<p style="margin:0 0 10px;">' +
+        '<span style="display:inline-block; padding:3px 12px; background:' + deltaBg + '; border-radius:20px; font-size:0.82rem; font-weight:700; color:' + deltaColor + ';">' +
+          deltaStr + ' ポイントの変化' +
+        '</span>' +
+      '</p>';
+  } else {
+    scoreDisplayHTML =
+      '<p style="margin:0 0 8px; line-height:1;">' +
+        '<span style="font-size:3.2rem; font-weight:900; color:' + scoreColor + ';">' + score + '</span>' +
+        '<span style="font-size:1.05rem; font-weight:600; color:#b0b8c4; margin-left:4px;">/ 100</span>' +
+      '</p>';
   }
   window.__prevDiagnosisScore = score;
 
@@ -148,36 +163,44 @@ function buildResultHTML(result, beforeText) {
   }
 
   return (
-    // ── 1. Score section ──────────────────────────────────────────────
-    '<div style="text-align:center; padding:22px 18px 20px; background:linear-gradient(135deg,#f9fafb 0%,#eff6ff 100%); border:1px solid #e5e7eb; border-radius:14px;">' +
-      '<p style="margin:0 0 8px; font-size:0.63rem; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:#9ca3af;">売れる可能性スコア</p>' +
-      '<p style="margin:0 0 6px; line-height:1;">' +
-        '<span style="font-size:3.2rem; font-weight:900; color:' + scoreColor + ';">' + score + '</span>' +
-        '<span style="font-size:1.05rem; font-weight:600; color:#b0b8c4; margin-left:4px;">/ 100</span>' +
-      '</p>' +
-      '<p style="margin:0; font-size:0.95rem; font-weight:800; color:' + scoreColor + ';">' + scoreLabel + '</p>' +
-      impactHTML +
+    // ── 1. この文章が売れない主な原因（AI改善ポイント）────────────────
+    '<div class="result-block">' +
+      '<p style="margin:0 0 4px; font-size:0.62rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:#9ca3af;">この文章が売れない主な原因</p>' +
+      '<ul style="margin:0; padding:0;">' + improvementsHTML + '</ul>' +
     '</div>' +
 
-    // ── 2. Before → After comparison ─────────────────────────────────
-    '<div>' +
-      '<p style="margin:0 0 10px; font-size:0.72rem; font-weight:700; letter-spacing:0.05em; color:#9ca3af; text-align:center;">改善前 → 改善後</p>' +
-      '<div style="display:flex; gap:10px; align-items:stretch;">' +
+    // ── 2. Score section ──────────────────────────────────────────────
+    '<div style="text-align:center; padding:22px 18px 20px; background:linear-gradient(135deg,#f9fafb 0%,#eff6ff 100%); border:1px solid #e5e7eb; border-radius:14px;">' +
+      '<p style="margin:0 0 10px;">' +
+        '<span style="display:inline-block; padding:4px 14px; background:' + diagnosisLabelBg + '; border-radius:6px; font-size:0.8rem; font-weight:800; color:' + diagnosisLabelColor + '; letter-spacing:0.02em;">' +
+          '診断結果：' + diagnosisLabel +
+        '</span>' +
+      '</p>' +
+      '<p style="margin:0 0 6px; font-size:0.63rem; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:#9ca3af;">訴求力スコア</p>' +
+      scoreDisplayHTML +
+      '<p style="margin:0; font-size:0.9rem; font-weight:700; color:' + scoreColor + ';">' + scoreLabel + '</p>' +
+    '</div>' +
 
-        // BEFORE box — rough sentence, intentionally muted
+    // ── 3. Before → After（改善後の例）───────────────────────────────
+    '<div>' +
+      '<p style="margin:0 0 12px; font-size:0.7rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#9ca3af; text-align:center;">Before → After</p>' +
+      '<div style="display:flex; gap:12px; align-items:stretch;">' +
+
+        // BEFORE box — muted, secondary
         '<div style="flex:1; min-width:0;">' +
-          '<p style="margin:0 0 5px; font-size:0.58rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:#9ca3af;">BEFORE</p>' +
-          '<div style="height:100%; box-sizing:border-box; background:#f3f4f6; border:1px solid #e5e7eb; border-radius:8px; padding:12px 13px; font-size:0.82rem; color:#9ca3af; line-height:1.7; word-break:break-word;">' +
+          '<p style="margin:0 0 6px; font-size:0.6rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:#9ca3af;">入力内容</p>' +
+          '<div style="height:100%; box-sizing:border-box; background:#f3f4f6; border:1px solid #e5e7eb; border-radius:8px; padding:12px 13px; font-size:0.82rem; color:#9ca3af; line-height:1.75; word-break:break-word;">' +
             escapedSentence +
           '</div>' +
         '</div>' +
 
         // Arrow divider
-        '<div style="display:flex; align-items:center; flex-shrink:0; padding-top:20px; color:#d1d5db; font-size:1.1rem;">→</div>' +
+        '<div style="display:flex; align-items:center; flex-shrink:0; padding-top:22px; color:#d1d5db; font-size:1.1rem;">→</div>' +
 
-        // AFTER box — punchy bullets, visually dominant
+        // AFTER box — dominant
         '<div style="flex:1.3; min-width:0;">' +
-          '<p style="margin:0 0 5px; font-size:0.58rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:#2563eb;">AFTER</p>' +
+          '<p style="margin:0 0 6px; font-size:0.6rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:#2563eb;">改善後</p>' +
+          '<p style="margin:0 0 9px; font-size:0.75rem; color:#6b7280; line-height:1.55;">曖昧だった特徴を具体化し、購買判断に必要な情報を補っています</p>' +
           '<div style="background:#eff6ff; border:2px solid #3b82f6; border-radius:8px; padding:13px 14px; word-break:break-word; box-shadow:0 2px 10px rgba(37,99,235,0.12);">' +
             renderAfterCopy(result.rewritten_copy) +
           '</div>' +
@@ -186,32 +209,7 @@ function buildResultHTML(result, beforeText) {
       '</div>' +
     '</div>' +
 
-    // ── 3. Improvements ───────────────────────────────────────────────
-    '<div class="result-block" style="order:5;">' +
-      '<h3>改善ポイント</h3>' +
-      '<ul style="margin:0; padding:0;">' + improvementsHTML + '</ul>' +
-    '</div>' +
-
-    // ── 4. 次にやると、もっと売れる ────────────────────────────────────
-    '<div style="padding:22px 22px 20px; background:linear-gradient(135deg,#eff6ff 0%,#f0fdf4 100%); border:1px solid #bfdbfe; border-radius:14px;">' +
-      '<p style="margin:0 0 16px; font-size:1rem; font-weight:900; color:#1e3a8a; line-height:1.35;">次にやると、もっと売れる</p>' +
-      '<ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:13px;">' +
-        '<li style="display:flex; align-items:flex-start; gap:11px;">' +
-          '<span style="flex-shrink:0; width:22px; height:22px; background:#2563eb; color:#fff; border-radius:50%; font-size:0.62rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin-top:1px;">1</span>' +
-          '<span style="font-size:0.875rem; color:#1e40af; line-height:1.65;">ターゲットを<strong>1人</strong>に絞ると、<strong>刺さります</strong></span>' +
-        '</li>' +
-        '<li style="display:flex; align-items:flex-start; gap:11px;">' +
-          '<span style="flex-shrink:0; width:22px; height:22px; background:#2563eb; color:#fff; border-radius:50%; font-size:0.62rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin-top:1px;">2</span>' +
-          '<span style="font-size:0.875rem; color:#1e40af; line-height:1.65;">数字を入れると、<strong>信頼されます</strong></span>' +
-        '</li>' +
-        '<li style="display:flex; align-items:flex-start; gap:11px;">' +
-          '<span style="flex-shrink:0; width:22px; height:22px; background:#2563eb; color:#fff; border-radius:50%; font-size:0.62rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin-top:1px;">3</span>' +
-          '<span style="font-size:0.875rem; color:#1e40af; line-height:1.65;">用途を限定すると、<strong>購入されやすくなります</strong></span>' +
-        '</li>' +
-      '</ul>' +
-    '</div>' +
-
-    // ── 5. Loop trigger ───────────────────────────────────────────────
+    // ── 4. Loop trigger ───────────────────────────────────────────────
     '<div style="text-align:center;">' +
       '<button onclick="scrollToInput()"' +
         ' style="width:100%; padding:17px 20px; background:#2563eb; color:#fff; font-size:1rem; font-weight:800; border:none; border-radius:10px; cursor:pointer; letter-spacing:0.04em; box-shadow:0 4px 16px rgba(37,99,235,0.28);"' +
@@ -219,7 +217,7 @@ function buildResultHTML(result, beforeText) {
         ' onmouseout="this.style.background=\'#2563eb\'; this.style.boxShadow=\'0 4px 16px rgba(37,99,235,0.28)\'">' +
         '修正して再診断する' +
       '</button>' +
-      '<p style="margin:10px 0 0; font-size:0.82rem; color:#6b7280; font-weight:500;">あと1回で、売れる文章に近づきます</p>' +
+      '<p style="margin:10px 0 0; font-size:0.82rem; color:#9ca3af;">内容を調整して再度分析できます</p>' +
     '</div>' +
 
     // ── Score detail (secondary, de-emphasised) ───────────────────────

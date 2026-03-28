@@ -123,11 +123,11 @@ Rules for each field:
 - "one_line_diagnosis": one sharp sentence in natural Japanese
 - "ng_points": 3 to 6 concrete problems, each written in natural Japanese
 - "improvements": 3 to 6 concrete fixes, each written in natural Japanese
-- "rewritten_copy": a revised product description in natural English only (do NOT translate this field)
+- "rewritten_copy": a revised product description in natural Japanese only. Tone: calm, practical, not salesy. Suitable for EC product listings. Short hook sentence + body text. Bullet points are acceptable.
 
 If the input is in Japanese, first understand it correctly, then evaluate its US sales potential.
-Always write rewritten_copy in natural English regardless of the input language.
-Always write verdict, one_line_diagnosis, ng_points, and improvements in natural Japanese.
+Always write rewritten_copy in natural Japanese regardless of the input language.
+Always write verdict, one_line_diagnosis, ng_points, improvements, and rewritten_copy in natural Japanese.
 
 Do not use placeholders such as [X], [Brand], [Product Name], or any bracketed values in rewritten_copy.
 If specific data is missing, generate realistic and reasonable values instead.
