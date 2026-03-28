@@ -123,7 +123,7 @@ Rules for each field:
 - "one_line_diagnosis": one sharp sentence in natural Japanese
 - "ng_points": 3 to 6 concrete problems, each written in natural Japanese
 - "improvements": 3 to 6 concrete fixes, each written in natural Japanese
-- "rewritten_copy": a revised product description in natural Japanese only. Tone: calm, practical, not salesy. Suitable for EC product listings. Short hook sentence + body text. Bullet points are acceptable.
+- "rewritten_copy": MUST be written entirely in natural Japanese. No English. No Romaji. Structure: (1) one short catchcopy line, (2) body text of 2-4 lines, (3) bullet points if helpful. Tone: calm, practical, not salesy — suitable for Japanese EC product listings. Must include: target-appropriate phrasing, specific numbers or concrete details, and at least one use scene. Example format: "通勤バッグに入れても邪魔にならない軽さ。\nアルミ素材で丈夫さも確保した、日常使いの折りたたみ傘です。\n\n約280gの軽量設計で、持ち歩いていることを忘れるほど。\nワンタッチ開閉で、急な雨でもすぐに対応できます。"
 
 If the input is in Japanese, first understand it correctly, then evaluate its US sales potential.
 Always write rewritten_copy in natural Japanese regardless of the input language.

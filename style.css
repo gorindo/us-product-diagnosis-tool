@@ -275,6 +275,16 @@ button#diagnoseButton {
 button#diagnoseButton:hover  { background-color: #1d4ed8; }
 button#diagnoseButton:active { background-color: #1e40af; }
 
+button#diagnoseButton.is-secondary {
+  background-color: #f3f4f6;
+  color: #6b7280;
+  border: 1.5px solid #e5e7eb;
+  font-weight: 600;
+  box-shadow: none;
+}
+button#diagnoseButton.is-secondary:hover  { background-color: #e9eaec; color: #4b5563; }
+button#diagnoseButton.is-secondary:active { background-color: #e2e3e6; }
+
 /* ─── Sample-state example block — muted, clearly not real output ── */
 
 #resultArea[data-state="sample"] .result-block:has(.rewritten-copy) {
