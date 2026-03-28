@@ -230,6 +230,8 @@ function buildResultHTML(result, beforeText) {
   );
 }
 
+var DEV_MODE = window.location.search.includes("dev=true");
+
 document.getElementById("diagnoseButton").addEventListener("click", async function () {
   var input = document.getElementById("productInput").value.trim();
   var resultArea = document.getElementById("resultArea");
@@ -240,7 +242,7 @@ document.getElementById("diagnoseButton").addEventListener("click", async functi
   }
 
   var usageCount = parseInt(localStorage.getItem("diagnosisUsageCount") || "0", 10);
-  if (usageCount >= 2) {
+  if (!DEV_MODE && usageCount >= 2) {
     alert("無料版は2回までです。続きは次のアップデートで解放されます。");
     return;
   }

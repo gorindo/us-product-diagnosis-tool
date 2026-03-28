@@ -673,6 +673,75 @@ body:has(#resultArea:not([data-state="sample"])) .sample-only {
   letter-spacing: 0.03em;
 }
 
+/* ─── Tag input fields ───────────────────────────── */
+
+.tag-field {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 10px;
+  background: transparent;
+  cursor: text;
+  min-height: 44px;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 6px 3px 9px;
+  background: #e8f0fe;
+  color: #1d4ed8;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.tag-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  background: none;
+  border: none;
+  border-radius: 2px;
+  color: #6b7280;
+  font-size: 0.8rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+
+.tag-chip-remove:hover {
+  background: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.tag-text-input {
+  flex: 1;
+  min-width: 90px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: #1a1a1a;
+  padding: 4px 4px;
+}
+
+.tag-text-input::placeholder {
+  color: #c9d0da;
+  font-weight: 400;
+}
+
 /* ─── Mobile ──────────────────────────────────────── */
 
 @media (max-width: 768px) {

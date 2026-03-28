@@ -27,10 +27,11 @@
 
     <!-- ── Left: input ── -->
     <section class="panel input-panel">
-      <p class="panel-lead">訴求力に関わる主な要素を確認できます</p>
+      <p class="panel-lead">生成AIで作成した商品説明の中から、成果に影響しやすい要素を抽出し、改善余地を明確にします。</p>
+      <p class="panel-subtext" style="margin:0;">分析結果は、そのまま改善に活用できます。</p>
       <div class="panel-header">
-        <span class="panel-title">商品情報を入力</span>
-        <p class="panel-subtext">分析したい商品の情報を入力してください</p>
+        <span class="panel-title">分析対象の情報を入力</span>
+        <p class="panel-subtext">商品情報、特徴、ターゲット、使用シーンなどを入力してください。</p>
       </div>
 
       <div class="input-fields">
@@ -40,19 +41,31 @@
         </div>
         <div class="field-row">
           <span class="field-label">素材</span>
-          <input id="f-material" class="field-input" type="text" placeholder="例）チタン、撥水加工ポリエステル">
+          <div class="tag-field" data-hidden="f-material">
+            <input class="tag-text-input" type="text" placeholder="例）チタン　→ Enterで追加">
+            <input type="hidden" id="f-material">
+          </div>
         </div>
         <div class="field-row">
           <span class="field-label">特徴</span>
-          <textarea id="f-features" class="field-input" placeholder="例）軽量、丈夫、耐風"></textarea>
+          <div class="tag-field" data-hidden="f-features">
+            <input class="tag-text-input" type="text" placeholder="例）軽量　→ Enterで追加">
+            <input type="hidden" id="f-features">
+          </div>
         </div>
         <div class="field-row">
           <span class="field-label">ターゲット</span>
-          <input id="f-target" class="field-input" type="text" placeholder="例）通勤する社会人">
+          <div class="tag-field" data-hidden="f-target">
+            <input class="tag-text-input" type="text" placeholder="例）通勤する社会人　→ Enterで追加">
+            <input type="hidden" id="f-target">
+          </div>
         </div>
         <div class="field-row">
           <span class="field-label">使用シーン</span>
-          <input id="f-scene" class="field-input" type="text" placeholder="例）雨の日の通勤、外出">
+          <div class="tag-field" data-hidden="f-scene">
+            <input class="tag-text-input" type="text" placeholder="例）雨の日の通勤　→ Enterで追加">
+            <input type="hidden" id="f-scene">
+          </div>
         </div>
       </div>
 
@@ -151,6 +164,72 @@
         .map(function (p) { return p[0] + "：" + p[1]; })
         .join("\n");
     });
+  </script>
+
+  <!-- Tag input logic -->
+  <script>
+    (function () {
+      function initTagField(wrapper) {
+        var hiddenId = wrapper.getAttribute('data-hidden');
+        var hiddenInput = document.getElementById(hiddenId);
+        var textInput = wrapper.querySelector('.tag-text-input');
+        var tags = [];
+
+        function syncHidden() {
+          hiddenInput.value = tags.join(', ');
+        }
+
+        function renderTags() {
+          wrapper.querySelectorAll('.tag-chip').forEach(function (c) { c.remove(); });
+          tags.forEach(function (tag, i) {
+            var chip = document.createElement('span');
+            chip.className = 'tag-chip';
+            var label = document.createElement('span');
+            label.textContent = tag;
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'tag-chip-remove';
+            btn.setAttribute('aria-label', '削除');
+            btn.textContent = '×';
+            btn.addEventListener('click', function (e) {
+              e.stopPropagation();
+              tags.splice(i, 1);
+              renderTags();
+              syncHidden();
+              textInput.focus();
+            });
+            chip.appendChild(label);
+            chip.appendChild(btn);
+            wrapper.insertBefore(chip, textInput);
+          });
+        }
+
+        textInput.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            var val = textInput.value.trim();
+            if (val) {
+              tags.push(val);
+              textInput.value = '';
+              renderTags();
+              syncHidden();
+            }
+          } else if (e.key === 'Backspace' && textInput.value === '') {
+            if (tags.length > 0) {
+              tags.pop();
+              renderTags();
+              syncHidden();
+            }
+          }
+        });
+
+        wrapper.addEventListener('click', function () {
+          textInput.focus();
+        });
+      }
+
+      document.querySelectorAll('.tag-field').forEach(initTagField);
+    })();
   </script>
 
   <script src="app.js"></script>
