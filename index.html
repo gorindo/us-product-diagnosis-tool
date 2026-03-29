@@ -17,8 +17,8 @@
 
   <section class="hero">
     <div class="hero-inner">
-      <p class="site-tagline">AIが生成した文章は、そのままでは訴求力が不十分なことがあります。</p>
-      <p class="site-positioning">AIは構造的な文章を生成しますが、購買文脈への最適化は別のプロセスが必要です。<br>本ツールは、商品情報をもとに市場視点での分析と改善提案を行います。<br>生成AIと組み合わせて利用することで、より実用的なアウトプットへ調整します。</p>
+      <p class="site-tagline">AIで作った商品説明を、海外販売向けに最適化するツールです。</p>
+      <p class="site-positioning">生成AIの文章をそのまま使うのではなく、訴求構造を整えてから翻訳・掲載することで成果が変わります。</p>
     </div>
   </section>
 
@@ -29,7 +29,8 @@
     <section class="panel input-panel">
       <div class="original-text-section">
         <label class="field-section-label" for="f-original-text">元の文章</label>
-        <textarea id="f-original-text" placeholder="ChatGPTなどで作った商品説明を貼り付けてください"></textarea>
+        <textarea id="f-original-text" placeholder="生成AIで作成した商品説明を貼り付けてください（そのままでもOKです）"></textarea>
+        <p class="workflow-hint">改善後の文章を整えたあと、英語化は翻訳ツールで仕上げてください。</p>
       </div>
 
       <div class="supplementary-header">
@@ -97,7 +98,11 @@
         <p style="margin:0; font-size:0.75rem; color:#b0b8c4; letter-spacing:0.04em;">例：このように変換されます</p>
         <div class="result-block">
           <h3>Rewritten English Copy Sample</h3>
-          <p class="rewritten-copy">[Example Output] This titanium umbrella is built for commuters who need a lightweight, durable solution for rainy days. Strong, compact, and easy to carry, it is designed for everyday reliability.</p>
+          <p class="rewritten-copy">通勤バッグに入れても邪魔にならない軽さ。
+チタン素材で丈夫さも確保した、日常使いの折りたたみ傘です。
+
+約280gの軽量設計で、持ち歩いていることを忘れるほど。
+ワンタッチ開閉で、急な雨でもすぐに対応できます。</p>
         </div>
 
         <!-- SAMPLE: override AFTER label for initial state only -->
