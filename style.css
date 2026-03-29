@@ -113,6 +113,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .panel-header {
@@ -375,29 +377,16 @@ body:has(#resultArea:not([data-state="sample"])) .sample-only {
   font-size: 0.9rem;
 }
 
-/* Sample & live: flex column to allow CSS ordering */
-#resultArea[data-state="sample"],
-#resultArea[data-state="live"] {
+/* Sample: flex column */
+#resultArea[data-state="sample"] {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-/* ─── LIVE: reorder app.js blocks via flex order ──
-   app.js emits blocks in this DOM order:
-   1 = score     2 = verdict    3 = NG points
-   4 = improvements    5 = rewritten copy
-─────────────────────────────────────────────────── */
-
-#resultArea[data-state="live"] .result-block:nth-child(1) { order: 4; }  /* score  → last   */
-#resultArea[data-state="live"] .result-block:nth-child(2) { display: none; }  /* verdict → hide  */
-#resultArea[data-state="live"] .result-block:nth-child(3) { display: none; }  /* NG      → hide  */
-#resultArea[data-state="live"] .result-block:nth-child(4) { order: 2; }  /* improvements → 2nd */
-#resultArea[data-state="live"] .result-block:nth-child(5) { order: 1; }  /* rewritten → 1st  */
-
-/* Limit improvements to 3 items */
-#resultArea[data-state="live"] .result-block:nth-child(4) li:nth-child(n+4) {
-  display: none;
+/* Live: block — the .result-inner-rail child handles flex layout */
+#resultArea[data-state="live"] {
+  display: block;
 }
 
 /* ─── AFTER block — the dominant section ────────────
@@ -572,6 +561,47 @@ body:has(#resultArea:not([data-state="sample"])) .sample-only {
   background: #dcfce7;
   color: #16a34a;
   border-color: #bbf7d0;
+}
+
+/* ─── Shared inner content rail ──────────────────── */
+
+/* The rail is a real child div created by JS after each diagnosis.
+   All result elements live inside it, sharing the same flex column. */
+.result-inner-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* All direct children share the same width system */
+.result-inner-rail > * {
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Improvements block: appears after score section and content block */
+.result-inner-rail > .result-block:nth-child(1) { order: 4; }
+
+/* Limit improvements list to 3 items */
+.result-inner-rail > .result-block:nth-child(1) li:nth-child(n+4) {
+  display: none;
+}
+
+/* ─── CTA block (loop trigger) ───────────────────── */
+
+.result-cta-block {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.result-cta-block button {
+  box-sizing: border-box !important;
+  width: 100% !important;
 }
 
 /* ─── Error / loading messages ───────────────────── */
