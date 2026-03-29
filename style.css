@@ -156,8 +156,13 @@ body {
 }
 
 #f-original-text.text-inserted {
-  border-color: #2563eb;
-  background-color: #eff6ff;
+  border-color: #ca8a04;
+  animation: textarea-flash 1s ease-out forwards;
+}
+
+@keyframes textarea-flash {
+  0%   { background-color: #fef9c3; }
+  100% { background-color: #ffffff; }
 }
 
 .supplementary-header {

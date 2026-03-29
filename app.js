@@ -4,7 +4,7 @@ function scrollToInput() {
   var rewritten = document.querySelector('.rewritten-copy');
   if (textarea && rewritten) {
     textarea.value = rewritten.innerText.trim();
-    textarea.scrollIntoView({ behavior: 'smooth' });
+    textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
     setTimeout(function () {
       textarea.classList.add('text-inserted');
       textarea.focus();
@@ -227,7 +227,7 @@ function buildResultHTML(result, beforeText) {
         ' style="width:100%; padding:17px 20px; background:#2563eb; color:#fff; font-size:1rem; font-weight:800; border:none; border-radius:10px; cursor:pointer; letter-spacing:0.04em; box-shadow:0 4px 16px rgba(37,99,235,0.28);"' +
         ' onmouseover="this.style.background=\'#1d4ed8\'; this.style.boxShadow=\'0 6px 22px rgba(37,99,235,0.38)\'"' +
         ' onmouseout="this.style.background=\'#2563eb\'; this.style.boxShadow=\'0 4px 16px rgba(37,99,235,0.28)\'">' +
-        'この改善案で文章を作り直す' +
+        '改善案を入力欄に反映する' +
       '</button>' +
       '<p style="margin:8px 0 0; font-size:0.8rem; color:#6b7280;">※この内容をもとに、より売れる文章に改善できます</p>' +
     '</div>' +
