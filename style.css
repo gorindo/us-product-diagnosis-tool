@@ -136,6 +136,37 @@ body {
   color: #b0b8c4;
 }
 
+/* ─── Original text section ─────────────────────── */
+
+.original-text-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-section-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #374151;
+}
+
+#f-original-text {
+  min-height: 160px;
+}
+
+#f-original-text.text-inserted {
+  border-color: #2563eb;
+  background-color: #eff6ff;
+}
+
+.supplementary-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 2px;
+}
+
 /* ─── Input panel ────────────────────────────────── */
 
 .panel-lead {

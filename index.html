@@ -27,11 +27,14 @@
 
     <!-- ── Left: input ── -->
     <section class="panel input-panel">
-      <p class="panel-lead">生成AIで作成した商品説明の中から、成果に影響しやすい要素を抽出し、改善余地を明確にします。</p>
-      <p class="panel-subtext" style="margin:0;">分析結果は、そのまま改善に活用できます。</p>
-      <div class="panel-header">
-        <span class="panel-title">分析対象の情報を入力</span>
-        <p class="panel-subtext">商品情報、特徴、ターゲット、使用シーンなどを入力してください。</p>
+      <div class="original-text-section">
+        <label class="field-section-label" for="f-original-text">元の文章</label>
+        <textarea id="f-original-text" placeholder="ChatGPTなどで作った商品説明を貼り付けてください"></textarea>
+      </div>
+
+      <div class="supplementary-header">
+        <span class="panel-title">補足情報（任意）</span>
+        <p class="panel-subtext">商品名・素材・ターゲットなどがあれば入力してください。</p>
       </div>
 
       <div class="input-fields">
@@ -72,7 +75,7 @@
       <!-- Hidden textarea: read by app.js, populated by sync script below -->
       <textarea id="productInput" style="display:none;"></textarea>
 
-      <button id="diagnoseButton">売れない原因を分析する</button>
+      <button id="diagnoseButton">この文章を分析する</button>
     </section>
 
     <!-- ── Right: transformation view ── -->
@@ -151,6 +154,7 @@
   <!-- Sync structured fields → hidden textarea BEFORE app.js reads it -->
   <script>
     document.getElementById("diagnoseButton").addEventListener("click", function () {
+      var originalText = document.getElementById("f-original-text").value.trim();
       var parts = [
         ["商品名", document.getElementById("f-name").value.trim()],
         ["素材", document.getElementById("f-material").value.trim()],
@@ -158,10 +162,15 @@
         ["ターゲット", document.getElementById("f-target").value.trim()],
         ["使用シーン", document.getElementById("f-scene").value.trim()]
       ];
-      document.getElementById("productInput").value = parts
+      var supplementary = parts
         .filter(function (p) { return p[1]; })
         .map(function (p) { return p[0] + "：" + p[1]; })
         .join("\n");
+      var combined = originalText;
+      if (supplementary) {
+        combined = (originalText ? originalText + "\n\n" : "") + supplementary;
+      }
+      document.getElementById("productInput").value = combined;
     });
   </script>
 

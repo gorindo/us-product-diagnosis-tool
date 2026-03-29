@@ -1,7 +1,19 @@
-// Scroll back to the input panel and focus the first field
+// Insert improved text into the main textarea, scroll to it, and highlight briefly
 function scrollToInput() {
-  document.querySelector('.input-panel').scrollIntoView({ behavior: 'smooth' });
-  setTimeout(function () { document.getElementById('f-name').focus(); }, 400);
+  var textarea = document.getElementById('f-original-text');
+  var rewritten = document.querySelector('.rewritten-copy');
+  if (textarea && rewritten) {
+    textarea.value = rewritten.innerText.trim();
+    textarea.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(function () {
+      textarea.classList.add('text-inserted');
+      textarea.focus();
+      setTimeout(function () { textarea.classList.remove('text-inserted'); }, 1500);
+    }, 400);
+  } else {
+    document.querySelector('.input-panel').scrollIntoView({ behavior: 'smooth' });
+    setTimeout(function () { if (textarea) textarea.focus(); }, 400);
+  }
 }
 
 // Best-effort rewrite of diagnostic messages into imperative form
