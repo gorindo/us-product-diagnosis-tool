@@ -109,11 +109,10 @@
       <!-- Footer note: shown only in sample state -->
       <p class="sample-only result-footer-note">入力後、改善余地と優先度が表示されます</p>
 
-      <!-- Copy button: always accessible -->
+      <!-- Copy button: hidden here, injected below improved text by script -->
       <div class="copy-row">
-        <button id="copyBtn" onclick="copyRewrittenCopy()">コピー</button>
+        <button onclick="copyRewrittenCopy()">コピー</button>
       </div>
-      <p class="copy-instruction" style="margin:0; font-size:0.8rem; color:#6b7280; text-align:right;">→ 分析結果として生成された改善後の文章です</p>
 
     </section>
 
@@ -239,10 +238,42 @@
       if (!el) return;
       navigator.clipboard.writeText(el.innerText).then(function () {
         var btn = document.getElementById("copyBtn");
-        btn.textContent = "コピーしました ✓";
-        setTimeout(function () { btn.textContent = "コピー"; }, 2000);
+        if (!btn) return;
+        btn.textContent = "コピーしました";
+        btn.classList.add("copied");
+        setTimeout(function () {
+          btn.textContent = "文章をコピー";
+          btn.classList.remove("copied");
+        }, 1500);
       });
     }
+  </script>
+
+  <script>
+    // Inject copy button directly below the improved text box after each diagnosis
+    (function () {
+      var ra = document.getElementById('resultArea');
+      new MutationObserver(function () {
+        if (ra.dataset.state !== 'live') return;
+        // Remove any previously injected copy row
+        var prev = document.querySelector('.copy-row-injected');
+        if (prev) prev.remove();
+        // Find the improved text element and its containing box
+        var rewritten = ra.querySelector('.rewritten-copy');
+        if (!rewritten) return;
+        var blueBox = rewritten.parentElement;
+        // Build the copy row wrapper and button
+        var wrapper = document.createElement('div');
+        wrapper.className = 'copy-row-injected';
+        var btn = document.createElement('button');
+        btn.id = 'copyBtn';
+        btn.textContent = '文章をコピー';
+        btn.onclick = copyRewrittenCopy;
+        wrapper.appendChild(btn);
+        // Insert directly below the improved text box
+        blueBox.insertAdjacentElement('afterend', wrapper);
+      }).observe(ra, { attributes: true, attributeFilter: ['data-state'] });
+    })();
   </script>
 
 </body>
