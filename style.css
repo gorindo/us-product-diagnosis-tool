@@ -627,6 +627,21 @@ body:has(#resultArea:not([data-state="sample"])) .sample-only {
   display: none;
 }
 
+/* ─── CTA button state: secondary (after text is reflected) ─ */
+
+#ctaBtn.cta-secondary {
+  background: #f3f4f6 !important;
+  color: #6b7280 !important;
+  box-shadow: none !important;
+  border: 1.5px solid #e5e7eb !important;
+  font-weight: 600 !important;
+}
+
+#ctaBtn.cta-secondary:hover {
+  background: #e9eaec !important;
+  color: #4b5563 !important;
+}
+
 /* ─── CTA block (loop trigger) ───────────────────── */
 
 .result-cta-block {

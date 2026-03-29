@@ -10,6 +10,11 @@ function scrollToInput() {
       textarea.focus();
       setTimeout(function () { textarea.classList.remove('text-inserted'); }, 1500);
     }, 400);
+    // State 3: left becomes primary again, right becomes secondary
+    var diagBtn = document.getElementById('diagnoseButton');
+    var ctaBtn = document.getElementById('ctaBtn');
+    if (diagBtn) diagBtn.classList.remove('is-secondary');
+    if (ctaBtn) ctaBtn.classList.add('cta-secondary');
   } else {
     document.querySelector('.input-panel').scrollIntoView({ behavior: 'smooth' });
     setTimeout(function () { if (textarea) textarea.focus(); }, 400);
@@ -223,7 +228,7 @@ function buildResultHTML(result, beforeText) {
 
     // ── 4. Loop trigger ───────────────────────────────────────────────
     '<div style="text-align:center;">' +
-      '<button onclick="scrollToInput()"' +
+      '<button id="ctaBtn" onclick="scrollToInput()"' +
         ' style="width:100%; padding:17px 20px; background:#2563eb; color:#fff; font-size:1rem; font-weight:800; border:none; border-radius:10px; cursor:pointer; letter-spacing:0.04em; box-shadow:0 4px 16px rgba(37,99,235,0.28);"' +
         ' onmouseover="this.style.background=\'#1d4ed8\'; this.style.boxShadow=\'0 6px 22px rgba(37,99,235,0.38)\'"' +
         ' onmouseout="this.style.background=\'#2563eb\'; this.style.boxShadow=\'0 4px 16px rgba(37,99,235,0.28)\'">' +
@@ -292,6 +297,9 @@ document.getElementById("diagnoseButton").addEventListener("click", async functi
       var diagBtn = document.getElementById("diagnoseButton");
       diagBtn.textContent = "再分析する";
       diagBtn.classList.add("is-secondary");
+      // State 2: right CTA is primary — ensure it has no secondary class
+      var ctaBtn = document.getElementById("ctaBtn");
+      if (ctaBtn) ctaBtn.classList.remove("cta-secondary");
     } else {
       var errorMessage = (data && data.error) ? data.error : "Something went wrong.";
       console.log("[debug] Parsed error body:", errorMessage);
