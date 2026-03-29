@@ -256,8 +256,13 @@ document.getElementById("diagnoseButton").addEventListener("click", async functi
     return;
   }
 
+  // 1 use = 1 actual analysis run (left button only; CTA and all other UI actions do not count)
   var usageCount = parseInt(localStorage.getItem("diagnosisUsageCount") || "0", 10);
   if (!DEV_MODE && usageCount >= 2) {
+    var diagBtn = document.getElementById("diagnoseButton");
+    diagBtn.classList.remove("is-secondary");
+    diagBtn.classList.add("is-limit-reached");
+    diagBtn.disabled = true;
     alert("無料版は2回までです。続きは次のアップデートで解放されます。");
     return;
   }
@@ -293,13 +298,22 @@ document.getElementById("diagnoseButton").addEventListener("click", async functi
     } else if (response.ok) {
       resultArea.innerHTML = buildResultHTML(data, input);
       resultArea.dataset.state = "live";
-      localStorage.setItem("diagnosisUsageCount", usageCount + 1);
+      var newCount = usageCount + 1;
+      localStorage.setItem("diagnosisUsageCount", newCount);
       var diagBtn = document.getElementById("diagnoseButton");
-      diagBtn.textContent = "再分析する";
-      diagBtn.classList.add("is-secondary");
       // State 2: right CTA is primary — ensure it has no secondary class
       var ctaBtn = document.getElementById("ctaBtn");
       if (ctaBtn) ctaBtn.classList.remove("cta-secondary");
+      if (!DEV_MODE && newCount >= 2) {
+        // State 3: limit reached — highest priority, overrides all other states
+        diagBtn.textContent = "分析できません（上限）";
+        diagBtn.classList.remove("is-secondary");
+        diagBtn.classList.add("is-limit-reached");
+        diagBtn.disabled = true;
+      } else {
+        diagBtn.textContent = "再分析する";
+        diagBtn.classList.add("is-secondary");
+      }
     } else {
       var errorMessage = (data && data.error) ? data.error : "Something went wrong.";
       console.log("[debug] Parsed error body:", errorMessage);

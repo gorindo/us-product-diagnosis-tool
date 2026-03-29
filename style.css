@@ -313,6 +313,19 @@ button#diagnoseButton {
 button#diagnoseButton:hover  { background-color: #1d4ed8; }
 button#diagnoseButton:active { background-color: #1e40af; }
 
+/* State 3: limit reached — highest priority */
+button#diagnoseButton.is-limit-reached,
+button#diagnoseButton.is-limit-reached:hover,
+button#diagnoseButton.is-limit-reached:active {
+  background-color: #e5e7eb;
+  color: #9ca3af;
+  border: 1.5px solid #d1d5db;
+  font-weight: 600;
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
 button#diagnoseButton.is-secondary {
   background-color: #f3f4f6;
   color: #6b7280;
