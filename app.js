@@ -106,22 +106,29 @@ function renderAfterCopy(text) {
 
 // Builds the result HTML from the JSON returned by the server
 function buildResultHTML(result, beforeText) {
-  var score = result.total_score;
+  var score = typeof result.score === 'number' ? result.score : 0;
 
-  // Score label + diagnosis label (4 bands)
-  var scoreColor, scoreLabel, diagnosisLabel, diagnosisLabelColor, diagnosisLabelBg;
+  // Score color + label derived from numeric score
+  var scoreColor, scoreLabel;
   if (score <= 30) {
     scoreColor = '#dc2626'; scoreLabel = '訴求力が低い状態です';
-    diagnosisLabel = '訴求不足（改善余地 大）'; diagnosisLabelColor = '#dc2626'; diagnosisLabelBg = '#fef2f2';
   } else if (score <= 60) {
     scoreColor = '#d97706'; scoreLabel = '改善余地が確認されます';
-    diagnosisLabel = '要改善'; diagnosisLabelColor = '#d97706'; diagnosisLabelBg = '#fffbeb';
   } else if (score <= 80) {
     scoreColor = '#2563eb'; scoreLabel = '訴求力は十分な水準です';
-    diagnosisLabel = '良好'; diagnosisLabelColor = '#2563eb'; diagnosisLabelBg = '#eff6ff';
   } else {
     scoreColor = '#16a34a'; scoreLabel = '高い訴求力が確認されます';
-    diagnosisLabel = '優秀'; diagnosisLabelColor = '#16a34a'; diagnosisLabelBg = '#f0fdf4';
+  }
+
+  // diagnosis_label comes from backend; map to badge colors
+  var diagnosisLabel = result.diagnosis_label || '';
+  var diagnosisLabelColor, diagnosisLabelBg;
+  if (diagnosisLabel === '弱い') {
+    diagnosisLabelColor = '#dc2626'; diagnosisLabelBg = '#fef2f2';
+  } else if (diagnosisLabel === '改善余地あり') {
+    diagnosisLabelColor = '#d97706'; diagnosisLabelBg = '#fffbeb';
+  } else {
+    diagnosisLabelColor = '#16a34a'; diagnosisLabelBg = '#f0fdf4';
   }
 
   // Score display: show before → after change when a previous score exists
@@ -160,30 +167,39 @@ function buildResultHTML(result, beforeText) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 
-  // Improvements list
-  var priorityLabels = ["最優先", "次", "最後"];
-  var improvementsHTML = "";
-  for (var j = 0; j < result.improvements.length; j++) {
-    var prefix = priorityLabels[Math.min(j, priorityLabels.length - 1)];
-    var msg = toImperative(result.improvements[j]);
-    improvementsHTML +=
-      '<li style="list-style:none; margin-bottom:8px; padding:10px 14px; background:#fafafa; border-left:3px solid #e5e7eb; border-radius:0 6px 6px 0;">' +
-        '<span style="display:block; font-size:0.6rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:#9ca3af; margin-bottom:4px;">' + prefix + '</span>' +
-        '<span style="font-size:0.875rem; color:#374151; line-height:1.6;">' + msg + '</span>' +
+  // Issues list (replaces old improvements array)
+  var issues = Array.isArray(result.issues) ? result.issues : [];
+  var priorityBorderColor = { '高': '#dc2626', '中': '#d97706', '低': '#e5e7eb' };
+  var priorityTextColor   = { '高': '#dc2626', '中': '#d97706', '低': '#9ca3af' };
+  var issuesHTML = '';
+  if (issues.length === 0) {
+    issuesHTML =
+      '<li style="list-style:none; padding:10px 14px; background:#fafafa; border-left:3px solid #e5e7eb; border-radius:0 6px 6px 0;">' +
+        '<span style="font-size:0.875rem; color:#9ca3af;">指摘事項はありません</span>' +
       '</li>';
-  }
-
-  // Score detail breakdown
-  var scoresHTML = "";
-  for (var key in result.scores) {
-    scoresHTML += "<li><strong>" + key.replace(/_/g, " ") + ":</strong> " + result.scores[key] + "</li>";
+  } else {
+    for (var j = 0; j < issues.length; j++) {
+      var issue = issues[j] || {};
+      var pri = issue.priority || '低';
+      var borderColor = priorityBorderColor[pri] || '#e5e7eb';
+      var priColor    = priorityTextColor[pri]   || '#9ca3af';
+      issuesHTML +=
+        '<li style="list-style:none; margin-bottom:10px; padding:10px 14px; background:#fafafa; border-left:3px solid ' + borderColor + '; border-radius:0 6px 6px 0;">' +
+          '<div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">' +
+            '<span style="font-size:0.875rem; font-weight:700; color:#374151;">' + (issue.title || '') + '</span>' +
+            '<span style="font-size:0.6rem; font-weight:800; color:' + priColor + '; border:1px solid ' + priColor + '; border-radius:4px; padding:1px 6px;">' + pri + '</span>' +
+          '</div>' +
+          '<span style="display:block; font-size:0.8rem; color:#6b7280; line-height:1.6; margin-bottom:4px;">' + (issue.reason || '') + '</span>' +
+          '<span style="display:block; font-size:0.8rem; color:#2563eb; line-height:1.6;">→ ' + (issue.fix || '') + '</span>' +
+        '</li>';
+    }
   }
 
   return (
-    // ── 1. この文章が売れない主な原因（AI改善ポイント）────────────────
+    // ── 1. Issues（診断の根拠）────────────────────────────────────────
     '<div class="result-block">' +
       '<p style="margin:0 0 4px; font-size:0.62rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:#9ca3af;">この文章が売れない主な原因</p>' +
-      '<ul style="margin:0; padding:0;">' + improvementsHTML + '</ul>' +
+      '<ul style="margin:0; padding:0;">' + issuesHTML + '</ul>' +
     '</div>' +
 
     // ── 2. Score section ──────────────────────────────────────────────
@@ -195,7 +211,10 @@ function buildResultHTML(result, beforeText) {
       '</p>' +
       '<p style="margin:0 0 6px; font-size:0.63rem; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:#9ca3af;">訴求力スコア</p>' +
       scoreDisplayHTML +
-      '<p style="margin:0; font-size:0.9rem; font-weight:700; color:' + scoreColor + ';">' + scoreLabel + '</p>' +
+      '<p style="margin:0 0 10px; font-size:0.9rem; font-weight:700; color:' + scoreColor + ';">' + scoreLabel + '</p>' +
+      (result.summary
+        ? '<p style="margin:0; font-size:0.82rem; color:#374151; line-height:1.65; text-align:left;">' + result.summary + '</p>'
+        : '') +
     '</div>' +
 
     // ── 3. Before → After（改善後の例）───────────────────────────────
@@ -219,7 +238,7 @@ function buildResultHTML(result, beforeText) {
           '<p style="margin:0 0 6px; font-size:0.6rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:#2563eb;">改善後</p>' +
           '<p style="margin:0 0 9px; font-size:0.75rem; color:#6b7280; line-height:1.55;">曖昧だった特徴を具体化し、購買判断に必要な情報を補っています</p>' +
           '<div style="background:#eff6ff; border:2px solid #3b82f6; border-radius:8px; padding:13px 14px; word-break:break-word; box-shadow:0 2px 10px rgba(37,99,235,0.12);">' +
-            renderAfterCopy(result.rewritten_copy) +
+            renderAfterCopy(result.improved_text || '') +
           '</div>' +
         '</div>' +
 
@@ -235,12 +254,6 @@ function buildResultHTML(result, beforeText) {
         '改善案を入力欄に反映する' +
       '</button>' +
       '<p style="margin:8px 0 0; font-size:0.8rem; color:#6b7280;">※この内容をもとに、より売れる文章に改善できます</p>' +
-    '</div>' +
-
-    // ── Score detail (secondary, de-emphasised) ───────────────────────
-    '<div class="result-block" style="order:6; opacity:0.65;">' +
-      '<p class="total-score">Total Score: <strong>' + score + ' / 100</strong></p>' +
-      '<ul class="score-list">' + scoresHTML + '</ul>' +
     '</div>'
   );
 }
