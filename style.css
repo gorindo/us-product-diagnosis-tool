@@ -624,11 +624,14 @@ body:has(#resultArea:not([data-state="sample"])) .sample-only {
 /* ─── Shared inner content rail ──────────────────── */
 
 /* The rail is a real child div created by JS after each diagnosis.
-   All result elements live inside it, sharing the same flex column. */
+   Desktop: 2-column grid — issues on left, score+after on right.
+   Medium (769–1024px): single column, issues first.
+   Mobile (≤768px): single column via workspace stacking. */
 .result-inner-rail {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
   box-sizing: border-box;
   width: 100%;
   max-width: 100%;
@@ -641,12 +644,77 @@ body:has(#resultArea:not([data-state="sample"])) .sample-only {
   min-width: 0;
 }
 
-/* Improvements block: appears after score section and content block */
-.result-inner-rail > .result-block:nth-child(1) { order: 4; }
+/* Issues block: left column, spans both rows */
+.result-inner-rail > :nth-child(1) {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  align-self: start;
+}
 
-/* Limit improvements list to 3 items */
-.result-inner-rail > .result-block:nth-child(1) li:nth-child(n+4) {
+/* Score: right column, top row */
+.result-inner-rail > :nth-child(2) {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+/* After text + CTA: right column, second row */
+.result-inner-rail > :nth-child(3) {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+/* Limit issues list to 3 items (free-tier cap) */
+.issues-section li:nth-child(n+4) {
   display: none;
+}
+
+/* ─── Issues section: left-column identity ────────── */
+
+.issues-section {
+  background: #fffbfb !important;
+  border: 1.5px solid #fecaca !important;
+  border-radius: 12px !important;
+  padding: 20px !important;
+}
+
+.issues-heading {
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  color: #111111 !important;
+  letter-spacing: -0.01em !important;
+  text-transform: none !important;
+  line-height: 1.4 !important;
+  margin: 0 0 14px !important;
+  padding-bottom: 12px;
+  border-bottom: 1.5px solid #fee2e2;
+}
+
+.issues-section ul {
+  padding: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
+}
+
+.issues-section li {
+  border-radius: 8px !important;
+  margin-bottom: 8px !important;
+  padding: 12px 14px !important;
+}
+
+/* High-priority items get a subtle red tint */
+.issue-high {
+  background: #fff5f5 !important;
+}
+
+/* Priority badge: larger, filled tint using currentColor */
+.priority-badge {
+  background-color: color-mix(in srgb, currentColor 15%, white) !important;
+  padding: 3px 10px !important;
+  border-radius: 4px !important;
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.04em !important;
+  border-width: 1.5px !important;
 }
 
 /* ─── CTA button state: secondary (after text is reflected) ─ */
@@ -870,6 +938,29 @@ body:has(#resultArea:not([data-state="sample"])) .sample-only {
 .tag-text-input::placeholder {
   color: #c9d0da;
   font-weight: 400;
+}
+
+/* ─── Workspace ratio: widen result panel when live ─ */
+
+@media (min-width: 769px) {
+  body:has(#resultArea[data-state="live"]) .workspace {
+    grid-template-columns: minmax(280px, 1fr) 1.5fr;
+  }
+}
+
+/* ─── Medium screens: collapse result-inner-rail to 1 col ── */
+
+@media (max-width: 1024px) {
+  .result-inner-rail {
+    grid-template-columns: 1fr;
+  }
+
+  .result-inner-rail > :nth-child(1),
+  .result-inner-rail > :nth-child(2),
+  .result-inner-rail > :nth-child(3) {
+    grid-column: 1;
+    grid-row: auto;
+  }
 }
 
 /* ─── Mobile ──────────────────────────────────────── */

@@ -325,6 +325,20 @@
         });
         ra.appendChild(rail);
 
+        // ── 6. Attach CSS classes to issues block for layout and styling ──
+        //    The issues block is child 1 of the rail (.result-block without .rewritten-copy).
+        var issuesBlock = rail.querySelector('.result-block');
+        if (issuesBlock && !issuesBlock.classList.contains('issues-section')) {
+          issuesBlock.classList.add('issues-section');
+          var heading = issuesBlock.querySelector('p');
+          if (heading) heading.classList.add('issues-heading');
+          issuesBlock.querySelectorAll('li').forEach(function (li) {
+            var badge = li.querySelector('div span:last-child');
+            if (badge) badge.classList.add('priority-badge');
+            if (badge && badge.textContent.trim() === '高') li.classList.add('issue-high');
+          });
+        }
+
       }).observe(ra, { attributes: true, attributeFilter: ['data-state'] });
     })();
   </script>
