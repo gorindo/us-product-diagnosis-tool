@@ -125,10 +125,27 @@ Rules for each field:
     Tell the seller exactly what to change, add, or remove.
   - "priority": one of "高" / "中" / "低"
 - "improved_text": MUST be written entirely in natural Japanese. No English. No Romaji.
-  Structure: (1) one short catchcopy line, (2) body text of 2–4 lines, (3) bullet points if helpful.
-  Tone: calm, practical, not salesy — suitable for Japanese EC product listings.
-  Must include: target-appropriate phrasing, specific numbers or concrete details, at least one use scene.
-  Example: "通勤バッグに入れても邪魔にならない軽さ。\nアルミ素材で丈夫さも確保した、日常使いの折りたたみ傘です。\n\n約280gの軽量設計で、持ち歩いていることを忘れるほど。\nワンタッチ開閉で、急な雨でもすぐに対応できます。"
+  Structure: (1) one benefit-driven catchcopy line, (2) body text of 2–4 lines, (3) bullet points if helpful.
+  Tone: calm, realistic, grounded — suitable for Japanese EC product listings. Not exaggerated, not salesy.
+
+  CRITICAL RULE — lead with experiential benefit (体感ベネフィット), not features or specs:
+  - Do NOT open with a specification (weight, size, material).
+  - DO open with what the user feels or gains from using it.
+  - Convert features into lived outcomes before writing:
+      軽い          → 持ち歩いても疲れない / カバンに入れても重さを感じない
+      コンパクト    → バッグに入れても邪魔にならない / 取り出すたびにストレスがない
+      丈夫          → 毎日使っても型崩れしない / 長く使い続けられる
+      速い          → 待ち時間のストレスがない
+      静か          → 夜でも気兼ねなく使える
+  - Specs and numbers belong in the body or bullets — never at the start.
+  - At least one sentence must describe a concrete use scene.
+  - Include specific numbers or concrete details somewhere in the body.
+
+  Example (correct — benefit-first):
+  "持ち歩いていることを忘れるほど、軽い折りたたみ傘。\n急な雨でもすぐ開けるワンタッチ設計で、通勤の小さなストレスをなくします。\n\n約280g・アルミ骨で、毎日のカバンに入れても負担になりません。\n晴雨兼用なので、天気予報を気にせず持ち出せます。"
+
+  Example (wrong — spec-first, do not do this):
+  "約280gの軽量設計。アルミ素材で丈夫さも確保した折りたたみ傘です。"
 
 If the input is in Japanese, first understand it correctly, then evaluate its US sales potential.
 Always write improved_text in natural Japanese regardless of input language.
